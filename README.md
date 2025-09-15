@@ -38,37 +38,50 @@ Additional requirements achieved:
 
 ## Getting Started
 
-```bash
 ### 1. Clone the repository
-- git clone https://github.com/your-username/SIL-Assessment.git
-- cd SIL-Assessment
+```bash
+git clone https://github.com/your-username/SIL-Assessment.git
+cd SIL-Assessment
+```
 
 ### 2. Install dependencies
-- npm install
+```bash
+npm install
+```
 
 ### 3. Run locally
-- npm run dev
-- The app will be available at http://localhost:5173
+```bash
+npm run dev
+```
+The app will be available at http://localhost:5173
 
 ## Code Quality
 
 ### Linting
-- We use ESLint to enforce consistent code style and catch errors early.
+We use ESLint to enforce consistent code style and catch errors early.
 
-#### Check for lint errors:
-- npm run lint
+### Check for lint errors:
+```bash
+npm run lint
+```
 
-#### Fix issues automatically:
-- npm run lint -- --fix
+### Fix issues automatically:
+```bash
+npm run lint -- --fix
+```
 
 ### Testing
-- Unit tests are written with Vitest.
+Unit tests are written with Vitest.
 
-#### Run tests:
-- npm run test
+### Run tests:
+```bash
+npm run test
+```
 
-#### Run tests with coverage:
-- npm run test:coverage
+### Run tests with coverage:
+```bash
+npm run test:coverage
+```
 
 ## Branching Strategy
 - main → production branch (auto-deployed to Vercel).
@@ -81,16 +94,21 @@ Additional requirements achieved:
 - If checks pass, merge, and the application is automatically deployed to Vercel.
 
 ## Deployment (Vercel)
-- Deployment is handled by Vercel and is triggered automatically whenever code is merged into the main branch.
+Deployment is handled by Vercel and is triggered automatically whenever code is merged into the main branch.
 
 
 ## Contributing
-- Ensure Node.js is installed (tested with v22.19.0).
-- Install dependencies with npm install.
-### Run linting and tests before pushing changes:
-- npm run lint
-- npm run test
+Ensure Node.js is installed (tested with v22.19.0).
 
-- Use Conventional Commits for meaningful commit messages (e.g., feat: add navbar component, fix: resolve lint issue).
-
+### Install dependencies with:
+```bash
+npm install.
 ```
+
+### Run linting and tests before pushing changes:
+```bash
+npm run lint
+npm run test
+```
+
+Use Conventional Commits for meaningful commit messages (e.g., feat: add navbar component, fix: resolve lint issue).
