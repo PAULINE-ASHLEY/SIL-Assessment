@@ -6,7 +6,7 @@ function Landing() {
         Your albums, photos, and users in one place
       </p>
       <button className="mt-6 px-6 py-3 bg-black rounded-md text-lg">
-        Login with Google
+        Login
       </button>
     </div>
   );

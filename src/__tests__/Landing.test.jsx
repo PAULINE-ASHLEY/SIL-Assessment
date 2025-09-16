@@ -19,7 +19,7 @@ describe('Landing Page', () => {
   it('renders the login button', () => {
     render(<Landing />);
     expect(
-      screen.getByRole('button', { name: /login with google/i })
+      screen.getByRole('button', { name: /login/i })
     ).toBeInTheDocument();
   });
 });

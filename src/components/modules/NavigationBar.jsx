@@ -1,10 +1,12 @@
-// Navigation Bar Component
+import { useAuth } from '../../context/AuthContext';
+
 function NavigationBar() {
+  const { user, logout } = useAuth();
   return (
-    <div>
-      {/* Replace with your actual navbar content */}
-      <h1>Navigation Bar</h1>
-    </div>
+    <nav>
+      <h2>SIL App</h2>
+      {user && <button onClick={logout}>Logout</button>}
+    </nav>
   );
 }
 
