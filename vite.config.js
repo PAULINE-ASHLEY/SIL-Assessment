@@ -1,13 +1,25 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   test: {
-    globals: true, // allows using describe/it/expect without imports
-    environment: 'jsdom', // simulate browser for React components
-    setupFiles: './src/setupTests.js', // extra config (e.g. jest-dom matchers)
+    globals: true, // lets you use describe/it/expect without imports
+    environment: 'jsdom', // needed for React components
+    setupFiles: './src/setupTests.js', // setup for matchers / mocks
+    include: ['src/__tests__/**/*.test.{js,jsx}'], // central test folder
+    css: true, // optional: allows CSS imports inside components
+  },
+  resolve: {
+    alias: {
+      components: path.resolve(__dirname, './src/components'),
+      pages: path.resolve(__dirname, './src/pages'),
+      navigation: path.resolve(__dirname, './src/navigation'),
+      app: path.resolve(__dirname, './src/app'),
+      // add more as needed
+    },
   },
 });
