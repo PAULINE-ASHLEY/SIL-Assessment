@@ -39,73 +39,88 @@ Additional requirements achieved:
 ## Getting Started
 
 ### 1. Clone the repository
+
 ```bash
-git clone https://github.com/your-username/SIL-Assessment.git
+git clone https://github.com/PAULINE-ASHLEY/SIL-Assessment.git
 cd SIL-Assessment
 ```
 
 ### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Run locally
+
 ```bash
 npm run dev
 ```
+
 The app will be available at http://localhost:5173
 
 ## Code Quality
 
 ### Linting
+
 We use ESLint to enforce consistent code style and catch errors early.
 
 ### Check for lint errors:
+
 ```bash
 npm run lint
 ```
 
 ### Fix issues automatically:
+
 ```bash
 npm run lint -- --fix
 ```
 
 ### Testing
+
 Unit tests are written with Vitest.
 
 ### Run tests:
+
 ```bash
 npm run test
 ```
 
 ### Run tests with coverage:
+
 ```bash
 npm run test:coverage
 ```
 
 ## Branching Strategy
+
 - main → production branch (auto-deployed to Vercel).
 - development → working branch for new features and fixes.
 
 ### Workflow:
+
 - Make changes in development.
 - Push to GitHub and open a Pull Request into main.
 - GitHub Actions runs linting and tests.
 - If checks pass, merge, and the application is automatically deployed to Vercel.
 
 ## Deployment (Vercel)
+
 Deployment is handled by Vercel and is triggered automatically whenever code is merged into the main branch.
 
-
 ## Contributing
+
 Ensure Node.js is installed (tested with v22.19.0).
 
 ### Install dependencies with:
+
 ```bash
-npm install.
+npm install
 ```
 
 ### Run linting and tests before pushing changes:
+
 ```bash
 npm run lint
 npm run test
