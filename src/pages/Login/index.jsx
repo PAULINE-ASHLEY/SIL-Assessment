@@ -22,7 +22,7 @@ export default function Login() {
         disabled={loading}
         className="px-6 py-3 bg-blue-600 text-white rounded-md disabled:opacity-50"
       >
-        {loading ? 'Signing in...' : 'Sign in with Google'}
+        {loading ? 'Signing in...' : 'Sign in'}
       </button>
     </div>
   );

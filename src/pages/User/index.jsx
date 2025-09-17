@@ -1,3 +1,3 @@
 export default function User() {
-  return <h1>Home Page Works</h1>;
+  return <h1>User Works</h1>;
 }

@@ -1,3 +1,3 @@
 export default function Album() {
-  return <h1>Home Page Works</h1>;
+  return <h1>Album Page Works</h1>;
 }
