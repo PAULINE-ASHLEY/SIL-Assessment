@@ -1,17 +1,27 @@
 import { Routes, Route, Outlet } from 'react-router-dom';
 import ProtectedRoutes from '../components/guards/ProtectedRoutes';
 import PageWrapper from '../components/layout/PageWrapper';
-import { Landing, Login, Home, User, Album, Photo, NotFound } from '../pages';
-import { LANDING, LOGIN, HOME, USER, ALBUM, PHOTO } from './constants';
+import {
+  Landing,
+  Login,
+  Home,
+  Signup,
+  NotFound,
+  User,
+  Album,
+  Photo,
+} from '../pages';
+import { LANDING, LOGIN, HOME, SIGNUP, USER, ALBUM, PHOTO } from './constants';
 
 export default function RouterConfig() {
   return (
     <Routes>
-      {/* PUBLIC ROUTES */}
+      {/* Public */}
       <Route path={LANDING} element={<Landing />} />
       <Route path={LOGIN} element={<Login />} />
+      <Route path={SIGNUP} element={<Signup />} />
 
-      {/* PROTECTED ROUTES */}
+      {/* Protected */}
       <Route element={<ProtectedRoutes />}>
         <Route
           element={
@@ -27,7 +37,7 @@ export default function RouterConfig() {
         </Route>
       </Route>
 
-      {/* 404 ROUTE */}
+      {/* 404 */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -4,9 +4,10 @@ import { useAuth } from '../../context/AuthContext';
 import AuthForm from '../../components/forms/AuthForm';
 import SocialLoginButton from '../../components/buttons/SocialLoginButton';
 
-const Login = () => {
-  const { user, loading, loginWithEmail, loginWithGoogle, loginWithGithub } =
+const Signup = () => {
+  const { user, loading, signupWithEmail, loginWithGoogle, loginWithGithub } =
     useAuth();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,12 +16,12 @@ const Login = () => {
     }
   }, [user, loading, navigate]);
 
-  const handleEmailLogin = async (email, password) => {
+  const handleSignup = async (email, password) => {
     try {
-      await loginWithEmail(email, password);
+      await signupWithEmail(email, password);
       navigate('/home');
     } catch (err) {
-      console.error('Login error:', err);
+      console.error('Signup error:', err);
     }
   };
 
@@ -28,10 +29,10 @@ const Login = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6">SignIn To Continue </h1>
+      <h1 className="text-3xl font-bold mb-6">SignUp To Continue</h1>
 
-      {/* Email/Password Login */}
-      <AuthForm onSubmit={handleEmailLogin} buttonLabel="Log In" />
+      {/* Email/Password Signup */}
+      <AuthForm onSubmit={handleSignup} buttonLabel="Sign Up" />
 
       {/* Social Login (Reusable Component) */}
       <SocialLoginButton
@@ -39,15 +40,15 @@ const Login = () => {
         onGithubLogin={loginWithGithub}
       />
 
-      {/* Link to Signup */}
-      <p className="text-gray-700">
-        Don’t have an account?{' '}
-        <Link to="/signup" className="text-black hover:underline">
-          Sign up here
+      {/* Link to Login */}
+      <p className="text-gray-700 mt-4">
+        Already have an account?{' '}
+        <Link to="/login" className="text-black hover:underline">
+          Log in here
         </Link>
       </p>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
