@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { NavigationBar, Footer } from 'components';
+import { NavigationBar } from 'components';
 
 /**
  * PageWrapper layout component
@@ -8,23 +8,14 @@ import { NavigationBar, Footer } from 'components';
  */
 function PageWrapper({ children }) {
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Navigation Bar */}
-      <nav className="py-2 text-white bg-black">
+    <div className="h-screen flex bg-white ">
+      <div className="w-[20%]">
         <NavigationBar />
-      </nav>
+      </div>
 
-      {/* Main Content Area */}
-      <main className="flex-grow w-full box-border min-h-[75vh]">
-        {children}
-      </main>
-
-      {/* Footer */}
-      <footer className="mt-20 bg-black">
-        <div className="py-8">
-          <Footer />
-        </div>
-      </footer>
+      <div className="w-[80%]">
+        <div className="p-10">{children}</div>
+      </div>
     </div>
   );
 }

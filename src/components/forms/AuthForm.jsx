@@ -29,7 +29,10 @@ const AuthForm = ({ onSubmit, buttonLabel }) => {
         className="w-full p-3 border rounded mb-4"
       />
 
-      <button type="submit" className="w-full bg-black text-white py-3 rounded">
+      <button
+        type="submit"
+        className="w-full bg-black hover:bg-blue-600 text-white py-3 rounded"
+      >
         {buttonLabel}
       </button>
     </form>

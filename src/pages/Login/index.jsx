@@ -27,25 +27,34 @@ const Login = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6">SignIn To Continue </h1>
+    <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row min-h-screen">
+      <div className="md:w-[50%] lg:w-[50%] xl:w-[50%] 2xl:w-[50%] bg-black py-10 lg:py-0 xl:py-0 2xl:py-0 rounded-r-4xl"></div>
+      <div className="md:w-[50%] lg:w-[50%] xl:w-[50%] 2xl:w-[50%] p-10 lg:p-0 xl:p-0 2xl:p-0 flex flex-col items-center mt-14">
+        <h1 className="text-2xl font-bold">Log in To SIL Assessment </h1>
 
-      {/* Email/Password Login */}
-      <AuthForm onSubmit={handleEmailLogin} buttonLabel="Log In" />
+        {/* Email/Password Login */}
+        <AuthForm
+          onSubmit={handleEmailLogin}
+          buttonLabel="Continue with Email"
+        />
 
-      {/* Social Login (Reusable Component) */}
-      <SocialLoginButton
-        onGoogleLogin={loginWithGoogle}
-        onGithubLogin={loginWithGithub}
-      />
+        {/* Social Login (Reusable Component) */}
+        <SocialLoginButton
+          onGoogleLogin={loginWithGoogle}
+          onGithubLogin={loginWithGithub}
+        />
 
-      {/* Link to Signup */}
-      <p className="text-gray-700">
-        Don’t have an account?{' '}
-        <Link to="/signup" className="text-black hover:underline">
-          Sign up here
-        </Link>
-      </p>
+        {/* Link to Signup */}
+        <p className="text-black">
+          Don’t have an account?{' '}
+          <Link
+            to="/signup"
+            className="text-blue-600 hover:text-black underline"
+          >
+            Sign Up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

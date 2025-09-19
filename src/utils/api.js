@@ -19,6 +19,13 @@ export async function fetchAlbumsByUser(userId) {
   return res.json();
 }
 
+// Add to your existing API functions in src/utils/api.js
+export async function fetchAlbumById(albumId) {
+  const res = await fetch(`${API_BASE}/albums/${albumId}`);
+  if (!res.ok) throw new Error('Failed to fetch album');
+  return res.json();
+}
+
 export async function fetchPhotosByAlbum(albumId) {
   const res = await fetch(`${API_BASE}/photos?albumId=${albumId}`);
   if (!res.ok) throw new Error('Failed to fetch photos');
