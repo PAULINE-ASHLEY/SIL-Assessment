@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import { fetchUsers, fetchAlbumsByUser } from '../../utils/api';
 import Pagination from '../../components/pagination/Pagination';
+import { useAuth } from '../../context/AuthContext';
 
 const Home = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
@@ -99,13 +101,59 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-4xl mx-auto">
+        {/*Username */}
+        <div className="text-lg font-bold pl-4">
+          <h1>Welcome, {user.displayName}!</h1>
+          <p className="text-gray-600 text-sm">
+            Explore the various Users, Albums and Photos.
+          </p>
+        </div>
+        {/*Overview */}
+        <div className="p-4 text-xl font-bold">
+          <h1>Overview</h1>
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-x-6 gap-y-4 md:gap-y-4 lg:gap-y-0 xl:gap-y-0 2xl:gap-y-0">
+          {/*Users Section */}
+          <div className="flex justify-between items-center bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6">
+            <div className="flex flex-col">
+              <h1 className="text-2xl font-bold">10</h1>
+              <p className="text-gray-600 text-sm">Number of Users</p>
+            </div>
+            <div className="bg-amber-100 p-4 rounded-full">
+              <img src="/images/user.png" alt="user" className="w-5 h-5" />
+            </div>
+          </div>
+          {/*Album Section */}
+          <div className="flex justify-between items-center bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6">
+            <div className="flex flex-col">
+              <h1 className="text-2xl font-bold">100</h1>
+              <p className="text-gray-600 text-sm">Number of Albums</p>
+            </div>
+            <div className="bg-green-100 p-4 rounded-full">
+              <img src="/images/album.png" alt="album" className="w-5 h-5" />
+            </div>
+          </div>
+          {/*Photo Section */}
+          <div className="flex justify-between items-center bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6">
+            <div className="flex flex-col">
+              <h1 className="text-2xl font-bold">5000</h1>
+              <p className="text-gray-600 text-sm">Number of Photos</p>
+            </div>
+            <div className="bg-red-100 p-4 rounded-full">
+              <img src="/images/photo.png" alt="photo" className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+        <div className="p-4 text-xl font-bold">
+          <h1>All Users</h1>
+        </div>
         {/* User Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
+        <div className="grid  xl:grid-cols-3 lg:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 mb-2">
           {currentUsers.map((user) => (
             <div
               key={user.id}
               onClick={() => navigate(`/user/${user.id}`)}
-              className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100"
+              className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100"
             >
               <div className="p-6">
                 <div className="flex flex-col items-center">
@@ -126,7 +174,7 @@ const Home = () => {
 
                   {/* User Info */}
                   <div className="ml-4 flex-1">
-                    <h2 className="text-lg font-semibold text-blue-600">
+                    <h2 className="text-lg font-semibold text-black">
                       {user.name}
                     </h2>
                     <p className="text-gray-600 text-sm mt-1">{user.email}</p>

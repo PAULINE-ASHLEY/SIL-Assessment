@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 import { fetchPhotoById, updatePhotoTitle } from '../../utils/api';
@@ -69,38 +69,9 @@ const Photo = () => {
 
   return (
     <div className="p-5 max-w-4xl mx-auto">
-      {/* Back Navigation */}
-      <div className="mb-5">
-        <Link
-          to={`/album/${photo.albumId}/photos`}
-          className="text-blue-500 hover:text-blue-700 flex items-center text-sm"
-        >
-          <svg
-            className="w-4 h-4 mr-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-          Back to Album
-        </Link>
-      </div>
-
       {/* Photo Display */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div className="flex flex-col items-center">
-          <img
-            src={photo.url}
-            alt={photo.title}
-            className="w-full max-w-md h-auto rounded-lg mb-6"
-          />
-
           {/* Photo Information */}
           <div className="w-full max-w-md">
             <div className="mb-4">
@@ -149,7 +120,7 @@ const Photo = () => {
                 <button
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-black text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSaving ? 'Saving...' : 'Save'}
                 </button>
@@ -164,7 +135,7 @@ const Photo = () => {
             ) : (
               <button
                 onClick={handleEdit}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                className="bg-black text-white px-6 py-2 rounded-md hover:bg-blue-600"
               >
                 Edit Title
               </button>
@@ -174,7 +145,7 @@ const Photo = () => {
       </div>
 
       {/* Photo Details */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-sm p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Photo Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
