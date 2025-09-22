@@ -1,19 +1,63 @@
 import { Link } from 'react-router-dom';
 
-function Landing() {
+export default function Landing() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-white">
-      <h1 className="text-5xl font-bold text-black">Welcome to SIL App</h1>
-      <p className="mt-4 text-xl text-black">
-        Your albums, photos, and users in one place
-      </p>
-      <button className="mt-6 px-6 py-3 bg-black rounded-md text-lg">
-        <Link to="/login" className="text-white">
-          Get Started
-        </Link>
-      </button>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <div className="absolute inset-0 -z-10">
+        {/* Main gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"></div>
+
+        {/* Geometric shapes overlay */}
+        <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-r from-blue-100 to-transparent rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-l from-purple-100 to-transparent rounded-full blur-3xl opacity-30"></div>
+
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48ZyBzdHJva2U9InJnYmEoMCwwLDAsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSI+PHBhdGggZD0iTTAgMGg2MHY2MEgweiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
+
+        {/* Subtle dots pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(theme(colors.blue.200)_1px,transparent_2px)] bg-[length:20px_20px] opacity-10"></div>
+      </div>
+
+      <div className="container mx-auto px-4 py-12 flex flex-col md:flex-row items-center justify-between">
+        {/* Text Content */}
+        <div className="md:w-1/2 mb-12 md:mb-0 px-14">
+          <div>
+            <h1 className="text-4xl font-bold text-black">
+              Transform How You{' '}
+              <b className="text-blue-600">Experience Memories</b>
+            </h1>
+            <p className="mt-4 text-md text-black">
+              SIL unites your photos, albums, and community in an intuitive
+              platform designed to make every memory easily accessible and
+              beautifully presented
+            </p>
+            <div>
+              <button className="mt-6 px-6 py-3 bg-black rounded-md text-lg hover:bg-blue-600">
+                <Link
+                  to="/signup"
+                  className="text-white flex flex-row items-center"
+                >
+                  Get Started
+                  <img
+                    src="/images/right.png"
+                    alt="Google logo"
+                    className="w-5 h-5 ml-2"
+                  />
+                </Link>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Illustration */}
+        <div className="md:w-1/2 flex justify-center">
+          <img
+            src="/images/landing.png"
+            alt="Headphones"
+            className="w-full max-w-md h-auto drop-shadow-2xl"
+          />
+        </div>
+      </div>
     </div>
   );
 }
-
-export default Landing;
