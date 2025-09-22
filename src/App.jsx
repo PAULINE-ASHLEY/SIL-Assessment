@@ -6,7 +6,7 @@ import RouterConfig from './navigation/RouterConfig';
 // - Could later wrap with Redux Provider or Context API
 function App() {
   return (
-    <div className="App font-roboto">
+    <div className="App font-sans">
       <BrowserRouter>
         <RouterConfig />
       </BrowserRouter>

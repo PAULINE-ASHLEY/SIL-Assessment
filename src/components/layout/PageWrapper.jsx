@@ -13,7 +13,7 @@ function PageWrapper({ children }) {
         <NavigationBar />
       </div>
 
-      <div className="w-[80%]">
+      <div className="w-[80%] overflow-y-auto">
         <div className="p-10">{children}</div>
       </div>
     </div>

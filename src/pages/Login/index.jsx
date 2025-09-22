@@ -28,9 +28,18 @@ const Login = () => {
 
   return (
     <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row min-h-screen">
-      <div className="md:w-[50%] lg:w-[50%] xl:w-[50%] 2xl:w-[50%] bg-black py-10 lg:py-0 xl:py-0 2xl:py-0 rounded-r-4xl"></div>
-      <div className="md:w-[50%] lg:w-[50%] xl:w-[50%] 2xl:w-[50%] p-10 lg:p-0 xl:p-0 2xl:p-0 flex flex-col items-center mt-14">
-        <h1 className="text-2xl font-bold">Log in To SIL Assessment </h1>
+      <div className="md:w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[40%] bg-black py-10 lg:py-0 xl:py-0 2xl:py-0 rounded-r-xl">
+        <div className="m-6">
+          <Link to="/">
+            <img src="/images/arrow.png" alt="Headphones" width={40} />
+          </Link>
+        </div>
+        <div className="flex flex-col justify-center items-center">
+          <img src="/images/login.png" alt="Headphones" width={400} />
+        </div>
+      </div>
+      <div className="md:w-[60%] lg:w-[60%] xl:w-[60%] 2xl:w-[60%] p-10 lg:p-0 xl:p-0 2xl:p-0 flex flex-col items-center mt-14">
+        <h1 className="text-2xl font-bold">Sign in to account </h1>
 
         {/* Email/Password Login */}
         <AuthForm
