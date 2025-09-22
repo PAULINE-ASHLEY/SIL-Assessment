@@ -112,12 +112,14 @@ const User = () => {
                   key={album.id}
                   className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6"
                 >
-                  <h3 className="font-normal text-lg mb-2">{album.title}</h3>
+                  <h3 className="font-normal text-md mb-2">
+                    <b>Album Title:</b> {album.title}
+                  </h3>
                   <p className="text-gray-600 text-sm mb-3">
                     Album ID: {album.id}
                   </p>
                   <Link
-                    to={`/album/${album.id}/photos`}
+                    to={`/album/${album.id}`}
                     className="bg-black text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"
                   >
                     View Photos
