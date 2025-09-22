@@ -38,11 +38,11 @@ const User = () => {
   if (!user) return <div>User not found.</div>;
 
   return (
-    <div className="p-5">
+    <div>
       {/* User Profile Header */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div className="flex items-center">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white text-4xl font-bold mr-6">
+          <div className="w-24 h-24 rounded-full bg-black flex items-center justify-center text-white text-4xl font-bold mr-6">
             {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>
           <div className="flex-1">
@@ -85,9 +85,11 @@ const User = () => {
       </div>
 
       {/* User's Albums Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Albums</h2>
+      <div>
+        <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between items-center mb-6 gap-y-2">
+          <h2 className="text-2xl font-bold text-gray-900">
+            {user.name} albums
+          </h2>
           {albums && (
             <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
               {albums.length} album{albums.length !== 1 ? 's' : ''}
@@ -104,19 +106,19 @@ const User = () => {
 
         {albums && albums.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 xl:grid-cols-3 gap-4 mb-6">
               {currentAlbums.map((album) => (
                 <div
                   key={album.id}
-                  className="border border-gray-200 p-4 rounded-md hover:shadow-md transition-shadow"
+                  className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6"
                 >
-                  <h3 className="font-semibold text-lg mb-2">{album.title}</h3>
+                  <h3 className="font-normal text-lg mb-2">{album.title}</h3>
                   <p className="text-gray-600 text-sm mb-3">
                     Album ID: {album.id}
                   </p>
                   <Link
                     to={`/album/${album.id}/photos`}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"
+                    className="bg-black text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"
                   >
                     View Photos
                   </Link>

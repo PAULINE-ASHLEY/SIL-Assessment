@@ -26,7 +26,7 @@ function NavigationBar() {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#f5f6fb] text-black flex flex-col">
+      <aside className="w-64 text-black flex flex-col">
         {/* App Logo */}
         <div className="p-4">
           <Link to="/home" className="text-xl font-bold flex items-center">
@@ -35,7 +35,7 @@ function NavigationBar() {
         </div>
 
         {/* User Profile Section */}
-        <div className="p-4">
+        <div className="p-4 border-y-2 border-[#f2f5f7]">
           <div className="flex flex-col mb-4">
             <img
               src={
@@ -45,9 +45,9 @@ function NavigationBar() {
               alt={user.displayName}
               className="w-12 h-12 rounded-full mr-3"
             />
-            <div>
+            <div className="mt-4">
               <h3 className="font-semibold">{user.displayName}</h3>
-              <p className="text-sm">{user.email}</p>
+              <p className="text-sm text-gray-600">{user.email}</p>
             </div>
           </div>
         </div>
@@ -65,41 +65,11 @@ function NavigationBar() {
                 Home
               </Link>
             </li>
-            <li>
-              <Link to="/home" className="flex items-center p-2 rounded-lg">
-                <img
-                  src="/images/user.png"
-                  alt="user"
-                  className="w-5 h-5 mr-2"
-                />
-                Users
-              </Link>
-            </li>
-            <li>
-              <Link to="/home" className="flex items-center p-2 rounded-lg">
-                <img
-                  src="/images/album.png"
-                  alt="album"
-                  className="w-5 h-5 mr-2"
-                />
-                Albums
-              </Link>
-            </li>
-            <li>
-              <Link to="/home" className="flex items-center p-2 rounded-lg">
-                <img
-                  src="/images/photo.png"
-                  alt="photo"
-                  className="w-5 h-5 mr-2"
-                />
-                Photos
-              </Link>
-            </li>
           </ul>
         </nav>
 
         {/* Logout Section */}
-        <div className="p-4">
+        <div className="p-4 border-t-2 border-[#f2f5f7]">
           <button
             onClick={handleLogout}
             className="flex items-center justify-center p-2 rounded-lg"
