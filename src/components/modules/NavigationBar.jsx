@@ -65,6 +65,36 @@ function NavigationBar() {
                 Home
               </Link>
             </li>
+            <li>
+              <Link to="/users" className="flex items-center p-2 rounded-lg">
+                <img
+                  src="/images/user.png"
+                  alt="home"
+                  className="w-5 h-5 mr-2"
+                />
+                Users
+              </Link>
+            </li>
+            <li>
+              <Link to="/albums" className="flex items-center p-2 rounded-lg">
+                <img
+                  src="/images/album.png"
+                  alt="home"
+                  className="w-5 h-5 mr-2"
+                />
+                Albums
+              </Link>
+            </li>
+            <li>
+              <Link to="/photos" className="flex items-center p-2 rounded-lg">
+                <img
+                  src="/images/photo.png"
+                  alt="home"
+                  className="w-5 h-5 mr-2"
+                />
+                Photos
+              </Link>
+            </li>
           </ul>
         </nav>
 
