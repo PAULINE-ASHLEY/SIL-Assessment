@@ -10,8 +10,22 @@ import {
   User,
   Album,
   Photo,
+  UserMain,
+  AlbumMain,
+  PhotoMain,
 } from '../pages';
-import { LANDING, LOGIN, HOME, SIGNUP, USER, ALBUM, PHOTO } from './constants';
+import {
+  LANDING,
+  LOGIN,
+  HOME,
+  SIGNUP,
+  USER,
+  ALBUM,
+  PHOTO,
+  USERMAIN,
+  ALBUMMAIN,
+  PHOTOMAIN,
+} from './constants';
 
 export default function RouterConfig() {
   return (
@@ -34,6 +48,9 @@ export default function RouterConfig() {
           <Route path={USER} element={<User />} />
           <Route path={ALBUM} element={<Album />} />
           <Route path={PHOTO} element={<Photo />} />
+          <Route path={USERMAIN} element={<UserMain />} />
+          <Route path={ALBUMMAIN} element={<AlbumMain />} />
+          <Route path={PHOTOMAIN} element={<PhotoMain />} />
         </Route>
       </Route>
 

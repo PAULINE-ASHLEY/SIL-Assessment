@@ -6,6 +6,18 @@ export async function fetchUsers() {
   return res.json();
 }
 
+export async function fetchAlbums() {
+  const res = await fetch(`${API_BASE}/albums`);
+  if (!res.ok) throw new Error('Failed to fetch albums');
+  return res.json();
+}
+
+export async function fetchPhotos() {
+  const res = await fetch(`${API_BASE}/photos`);
+  if (!res.ok) throw new Error('Failed to fetch photos');
+  return res.json();
+}
+
 export async function fetchUserById(id) {
   const res = await fetch(`${API_BASE}/users/${id}`);
   if (!res.ok) throw new Error('Failed to fetch user');

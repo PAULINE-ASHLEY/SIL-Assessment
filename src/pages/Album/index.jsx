@@ -1,7 +1,11 @@
 import { useParams, Link } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
-import { fetchAlbumById, fetchPhotosByAlbum } from '../../utils/api';
+import {
+  fetchAlbumById,
+  fetchPhotosByAlbum,
+  fetchUserById,
+} from '../../utils/api';
 import Pagination from '../../components/pagination/Pagination';
 
 const Album = () => {
@@ -16,6 +20,15 @@ const Album = () => {
     loading: albumLoading,
     error: albumError,
   } = useFetch(fetchAlbumFn);
+
+  // Fetch user data for breadcrumb
+  const fetchUserFn = useCallback(() => {
+    if (album?.userId) {
+      return fetchUserById(album.userId);
+    }
+    return Promise.resolve(null);
+  }, [album?.userId]);
+  const { data: user, loading: userLoading } = useFetch(fetchUserFn);
 
   // Fetch album's photos
   const fetchPhotosFn = useCallback(() => fetchPhotosByAlbum(id), [id]);
@@ -32,12 +45,89 @@ const Album = () => {
     ? photos.slice(indexOfFirstPhoto, indexOfLastPhoto)
     : [];
 
-  if (albumLoading) return <div>Loading album information...</div>;
-  if (albumError) return <div>Error: {albumError}</div>;
-  if (!album) return <div>Album not found.</div>;
+  if (albumLoading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+
+  if (albumError)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500 text-center">
+          <svg
+            className="w-16 h-16 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <p>Error: {albumError}</p>
+        </div>
+      </div>
+    );
+
+  if (!user)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <svg
+            className="w-16 h-16 mx-auto mb-4 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 002 2z"
+            />
+          </svg>
+          <p className="text-gray-500">No albums found.</p>
+        </div>
+      </div>
+    );
 
   return (
     <div className="p-5">
+      {/* Breadcrumb */}
+      <nav className="flex mb-6" aria-label="Breadcrumb">
+        <ol className="flex items-center space-x-2 text-sm">
+          <li>
+            <Link to="/home" className="text-blue-600 hover:text-blue-800">
+              Home
+            </Link>
+          </li>
+          <li className="flex items-center">
+            <span className="text-gray-400 mx-2">/</span>
+            <Link to="/users" className="text-blue-600 hover:text-blue-800">
+              Users
+            </Link>
+          </li>
+          <li className="flex items-center">
+            <span className="text-gray-400 mx-2">/</span>
+            <Link
+              to={`/user/${album.userId}`}
+              className="text-blue-600 hover:text-blue-800"
+            >
+              {userLoading ? 'Loading...' : user?.name || 'User'}
+            </Link>
+          </li>
+          <li className="flex items-center">
+            <span className="text-gray-400 mx-2">/</span>
+            <span className="text-gray-500">Album {album.id}</span>
+          </li>
+        </ol>
+      </nav>
+
       {/* Album Information Header */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <h1 className="text-2xl font-normal text-gray-900 mb-2">
@@ -79,11 +169,6 @@ const Album = () => {
                   key={photo.id}
                   className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6"
                 >
-                  {/* <img
-                    src={photo.thumbnailUrl}
-                    alt={photo.title}
-                    className="w-full h-auto mb-2 rounded"
-                  /> */}
                   <p className="text-sm text-black line-clamp-2 font-normal">
                     <b>Photo Title:</b> {photo.title}
                   </p>

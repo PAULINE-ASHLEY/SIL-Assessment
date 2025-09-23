@@ -8,6 +8,31 @@ const Pagination = ({
 
   if (totalPages <= 1) return null;
 
+  // Calculate the range of pages to show (4 pages at a time)
+  const getVisiblePages = () => {
+    const visiblePageCount = 4;
+    let startPage = Math.max(1, currentPage - Math.floor(visiblePageCount / 2));
+    let endPage = startPage + visiblePageCount - 1;
+
+    // Adjust if we're near the end
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - visiblePageCount + 1);
+    }
+
+    // Adjust if we're near the beginning
+    if (endPage - startPage + 1 < visiblePageCount && startPage > 1) {
+      startPage = Math.max(1, endPage - visiblePageCount + 1);
+    }
+
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i
+    );
+  };
+
+  const visiblePages = getVisiblePages();
+
   return (
     <div className="flex items-center justify-center gap-2 mt-6">
       <button
@@ -18,7 +43,23 @@ const Pagination = ({
         Previous
       </button>
 
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+      {/* Show first page and ellipsis if needed */}
+      {visiblePages[0] > 1 && (
+        <>
+          <button
+            onClick={() => onPageChange(1)}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+          >
+            1
+          </button>
+          {visiblePages[0] > 2 && (
+            <span className="px-2 text-gray-500">...</span>
+          )}
+        </>
+      )}
+
+      {/* Visible page buttons */}
+      {visiblePages.map((number) => (
         <button
           key={number}
           onClick={() => onPageChange(number)}
@@ -29,6 +70,21 @@ const Pagination = ({
           {number}
         </button>
       ))}
+
+      {/* Show last page and ellipsis if needed */}
+      {visiblePages[visiblePages.length - 1] < totalPages && (
+        <>
+          {visiblePages[visiblePages.length - 1] < totalPages - 1 && (
+            <span className="px-2 text-gray-500">...</span>
+          )}
+          <button
+            onClick={() => onPageChange(totalPages)}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50"
+          >
+            {totalPages}
+          </button>
+        </>
+      )}
 
       <button
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}

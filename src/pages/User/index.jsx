@@ -33,12 +33,77 @@ const User = () => {
     ? albums.slice(indexOfFirstAlbum, indexOfLastAlbum)
     : [];
 
-  if (userLoading) return <div>Loading user information...</div>;
-  if (userError) return <div>Error: {userError}</div>;
-  if (!user) return <div>User not found.</div>;
+  if (userLoading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  if (userError)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500 text-center">
+          <svg
+            className="w-16 h-16 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <p>Error: {userError}</p>
+        </div>
+      </div>
+    );
+  if (!user)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <svg
+            className="w-16 h-16 mx-auto mb-4 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 002 2z"
+            />
+          </svg>
+          <p className="text-gray-500">No users found.</p>
+        </div>
+      </div>
+    );
 
   return (
     <div>
+      {/* Breadcrumb */}
+      <nav className="flex mb-6" aria-label="Breadcrumb">
+        <ol className="flex items-center space-x-2 text-sm">
+          <li>
+            <Link to="/home" className="text-blue-600 hover:text-blue-800">
+              Home
+            </Link>
+          </li>
+          <li className="flex items-center">
+            <span className="text-gray-400 mx-2">/</span>
+            <Link to="/users" className="text-blue-600 hover:text-blue-800">
+              Users
+            </Link>
+          </li>
+          <li className="flex items-center">
+            <span className="text-gray-400 mx-2">/</span>
+            <span className="text-gray-500">{user.name}</span>
+          </li>
+        </ol>
+      </nav>
       {/* User Profile Header */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div className="flex items-center">
@@ -120,7 +185,7 @@ const User = () => {
                   </p>
                   <Link
                     to={`/album/${album.id}`}
-                    className="bg-black text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"
+                    className="bg-black text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"
                   >
                     View Photos
                   </Link>

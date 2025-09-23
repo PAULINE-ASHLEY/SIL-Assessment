@@ -8,4 +8,7 @@ export { default as Home } from './Home';
 export { default as User } from './User';
 export { default as Album } from './Album';
 export { default as Photo } from './Photo';
+export { default as PhotoMain } from './PhotoMain';
+export { default as UserMain } from './UserMain';
+export { default as AlbumMain } from './AlbumMain';
 export { default as NotFound } from './NotFound';
