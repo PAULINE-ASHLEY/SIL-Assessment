@@ -130,9 +130,9 @@ const Album = () => {
 
       {/* Album Information Header */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-        <h1 className="text-2xl font-normal text-gray-900 mb-2">
+        <h3 className="text-lg font-normal text-gray-900 mb-2">
           <b>Album Title:</b> {album.title}
-        </h1>
+        </h3>
         <div className="flex items-center justify-between">
           <div>
             <p className="text-gray-600">Album ID: {album.id}</p>
@@ -144,7 +144,7 @@ const Album = () => {
       {/* Photos Section */}
       <div>
         <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between items-center mb-6 gap-y-2">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-lg font-bold text-gray-900">
             All {album.title} photos
           </h2>
           {photos && (
@@ -169,10 +169,10 @@ const Album = () => {
                   key={photo.id}
                   className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6"
                 >
-                  <p className="text-sm text-black line-clamp-2 font-normal">
+                  <h4 className="font-normal text-md mb-2">
                     <b>Photo Title:</b> {photo.title}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  </h4>
+                  <p className="text-gray-600 text-sm mb-3">
                     Photo ID: {photo.id}
                   </p>
                   <Link

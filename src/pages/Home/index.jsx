@@ -6,32 +6,37 @@ import Pagination from '../../components/pagination/Pagination';
 import { useAuth } from '../../context/AuthContext';
 
 const Home = () => {
+  // Authentication context to get current user info
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6);
-  const [userAlbumsCount, setUserAlbumsCount] = useState({});
 
-  // Fetch users
+  // Pagination state management
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(6); // Fixed number of items per page
+  const [userAlbumsCount, setUserAlbumsCount] = useState({}); // Stores album counts for each user
+
+  // Fetch all users using custom useFetch hook with memoized callback
   const fetchFn = useCallback(() => fetchUsers(), []);
   const { data: users, loading, error } = useFetch(fetchFn);
 
-  // Fetch album counts for each user
+  // Effect to fetch album counts for each user when users data changes
   useEffect(() => {
     const fetchAlbumCounts = async () => {
       if (!users) return;
 
       const albumCounts = {};
+      // Create promises for all album count requests
       const promises = users.map(async (user) => {
         try {
           const albums = await fetchAlbumsByUser(user.id);
           albumCounts[user.id] = albums.length;
         } catch (err) {
           console.error(`Failed to fetch albums for user ${user.id}:`, err);
-          albumCounts[user.id] = 0;
+          albumCounts[user.id] = 0; // Set to 0 on error
         }
       });
 
+      // Wait for all requests to complete
       await Promise.all(promises);
       setUserAlbumsCount(albumCounts);
     };
@@ -39,17 +44,23 @@ const Home = () => {
     fetchAlbumCounts();
   }, [users]);
 
+  // Reset to first page when users data changes
   useEffect(() => {
     setCurrentPage(1);
   }, [users]);
 
+  // Loading state with spinner animation
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div
+          role="status"
+          className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"
+        ></div>
       </div>
     );
 
+  // Error state with visual error icon and message
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -72,6 +83,7 @@ const Home = () => {
       </div>
     );
 
+  // Empty state when no users are found
   if (!users || users.length === 0)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -94,6 +106,7 @@ const Home = () => {
       </div>
     );
 
+  // Calculate pagination slice for current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem);
@@ -101,19 +114,20 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-4xl mx-auto">
-        {/*Username */}
+        {/* Welcome section displaying authenticated user's name */}
         <div className="text-lg font-bold pl-4">
           <h1>Welcome, {user.displayName}!</h1>
           <p className="text-gray-600 text-sm">
             Explore the various Users, Albums and Photos.
           </p>
         </div>
-        {/*Overview */}
-        <div className="p-4 text-xl font-bold">
+
+        {/* Overview section with statistics cards */}
+        <div className="p-4 text-lg font-bold">
           <h1>Overview</h1>
         </div>
         <div className="grid grid-cols-1 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-x-6 gap-y-4 md:gap-y-4 lg:gap-y-0 xl:gap-y-0 2xl:gap-y-0">
-          {/*Users Section */}
+          {/* Users statistics card */}
           <div className="flex justify-between items-center bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6">
             <div className="flex flex-col">
               <h1 className="text-2xl font-bold">10</h1>
@@ -123,7 +137,8 @@ const Home = () => {
               <img src="/images/user.png" alt="user" className="w-5 h-5" />
             </div>
           </div>
-          {/*Album Section */}
+
+          {/* Albums statistics card */}
           <div className="flex justify-between items-center bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6">
             <div className="flex flex-col">
               <h1 className="text-2xl font-bold">100</h1>
@@ -133,7 +148,8 @@ const Home = () => {
               <img src="/images/album.png" alt="album" className="w-5 h-5" />
             </div>
           </div>
-          {/*Photo Section */}
+
+          {/* Photos statistics card */}
           <div className="flex justify-between items-center bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6">
             <div className="flex flex-col">
               <h1 className="text-2xl font-bold">5000</h1>
@@ -144,20 +160,23 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="p-4 text-xl font-bold">
+
+        {/* Users listing section header */}
+        <div className="p-4 text-lg font-bold">
           <h1>All Users</h1>
         </div>
-        {/* User Cards Grid */}
+
+        {/* User Cards Grid with responsive layout */}
         <div className="grid  xl:grid-cols-3 lg:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 mb-2">
           {currentUsers.map((user) => (
             <div
               key={user.id}
-              onClick={() => navigate(`/user/${user.id}`)}
+              onClick={() => navigate(`/user/${user.id}`)} // Navigates to user profile on click
               className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100"
             >
               <div className="p-6">
                 <div className="flex flex-col items-center">
-                  {/* User Avatar */}
+                  {/* User Avatar with fallback to initial */}
                   <div className="flex-shrink-0">
                     <div className="w-16 h-16 rounded-full bg-black flex items-center justify-center text-white text-xl font-bold">
                       {user.image ? (
@@ -172,7 +191,7 @@ const Home = () => {
                     </div>
                   </div>
 
-                  {/* User Info */}
+                  {/* User Information */}
                   <div className="ml-4 flex-1">
                     <h2 className="text-lg font-semibold text-black">
                       {user.name}
@@ -184,7 +203,7 @@ const Home = () => {
                       </p>
                     )}
 
-                    {/* Album Count */}
+                    {/* Album Count Badge */}
                     <div className="mt-3">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-600">
                         <img
@@ -218,7 +237,7 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Pagination */}
+        {/* Pagination Component */}
         <div className="rounded-lg p-2">
           <Pagination
             currentPage={currentPage}
