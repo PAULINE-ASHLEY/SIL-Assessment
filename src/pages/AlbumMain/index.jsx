@@ -7,12 +7,10 @@ import { Link } from 'react-router-dom';
 
 const AlbumMain = () => {
   const navigate = useNavigate();
-
-  // State for pagination management
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
 
-  // Fetch all albums using custom useFetch hook
+  // Fetching all albums using custom useFetch hook
   const fetchFn = useCallback(() => fetchAlbums(), []);
   const { data: albums, loading, error } = useFetch(fetchFn);
 
@@ -78,7 +76,7 @@ const AlbumMain = () => {
       </div>
     );
 
-  // Pagination calculations - determine which albums to show on current page
+  // Determines which albums to show on current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentAlbums = albums.slice(indexOfFirstItem, indexOfLastItem);
@@ -91,12 +89,12 @@ const AlbumMain = () => {
           <h1>All Albums</h1>
         </div>
 
-        {/* Album Cards Grid - Responsive layout with different column counts */}
+        {/* Album Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {currentAlbums.map((album) => (
             <div
               key={album.id}
-              onClick={() => navigate(`/album/${album.id}`)} // Navigate to album detail page
+              onClick={() => navigate(`/album/${album.id}`)}
               className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100"
             >
               <div className="p-6">
@@ -111,7 +109,7 @@ const AlbumMain = () => {
                       Album ID: {album.id}
                     </p>
 
-                    {/* View Photos button/link */}
+                    {/* View Photos link */}
                     <Link
                       to="#"
                       className="bg-black text-white mt-4 px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"

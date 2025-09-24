@@ -1,13 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useState } from 'react';
 
 function NavigationBar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   if (!user) {
@@ -24,11 +30,46 @@ function NavigationBar() {
   }
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 text-black flex flex-col">
+    <>
+      {/* Mobile Header */}
+      <div className="md:hidden bg-white shadow-sm">
+        <div className="flex justify-between items-center p-4">
+          <button onClick={toggleSidebar} className="p-2 rounded-md text-black">
+            <img src="/images/menu.png" alt="Menu" className="w-6 h-6" />
+          </button>
+          <Link to="/home" className="text-xl font-bold">
+            SIL Assessment
+          </Link>
+          <div className="w-6"></div> {/* Spacer for balance */}
+        </div>
+      </div>
+
+      {/* Overlay for mobile when sidebar is open */}
+      {isSidebarOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+
+      {/* Sidebar only */}
+      <aside
+        className={`
+    fixed md:static inset-y-0 left-0
+    w-64 bg-white z-50
+    transform transition-transform duration-300
+    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+  `}
+      >
+        {/* Close button for mobile */}
+        <div className="md:hidden flex justify-end p-4">
+          <button onClick={toggleSidebar} className="p-2 rounded-md text-black">
+            <img src="/images/close.png" alt="close" className="w-6 h-6" />
+          </button>
+        </div>
+
         {/* App Logo */}
-        <div className="p-4">
+        <div className="p-4 md:block hidden">
           <Link to="/home" className="text-xl font-bold flex items-center">
             SIL Assessment
           </Link>
@@ -56,7 +97,11 @@ function NavigationBar() {
         <nav className="flex-1 p-4">
           <ul>
             <li>
-              <Link to="/home" className="flex items-center p-2 rounded-lg">
+              <Link
+                to="/home"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                onClick={() => setIsSidebarOpen(false)}
+              >
                 <img
                   src="/images/home.png"
                   alt="home"
@@ -66,30 +111,42 @@ function NavigationBar() {
               </Link>
             </li>
             <li>
-              <Link to="/users" className="flex items-center p-2 rounded-lg">
+              <Link
+                to="/users"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                onClick={() => setIsSidebarOpen(false)}
+              >
                 <img
                   src="/images/user.png"
-                  alt="home"
+                  alt="users"
                   className="w-5 h-5 mr-2"
                 />
                 Users
               </Link>
             </li>
             <li>
-              <Link to="/albums" className="flex items-center p-2 rounded-lg">
+              <Link
+                to="/albums"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                onClick={() => setIsSidebarOpen(false)}
+              >
                 <img
                   src="/images/album.png"
-                  alt="home"
+                  alt="albums"
                   className="w-5 h-5 mr-2"
                 />
                 Albums
               </Link>
             </li>
             <li>
-              <Link to="/photos" className="flex items-center p-2 rounded-lg">
+              <Link
+                to="/photos"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-100"
+                onClick={() => setIsSidebarOpen(false)}
+              >
                 <img
                   src="/images/photo.png"
-                  alt="home"
+                  alt="photos"
                   className="w-5 h-5 mr-2"
                 />
                 Photos
@@ -102,7 +159,7 @@ function NavigationBar() {
         <div className="p-4 border-t-2 border-[#f2f5f7]">
           <button
             onClick={handleLogout}
-            className="flex items-center justify-center p-2 rounded-lg"
+            className="flex items-center p-2 rounded-lg hover:bg-gray-100 w-full"
           >
             <img
               src="/images/logout.png"
@@ -113,7 +170,7 @@ function NavigationBar() {
           </button>
         </div>
       </aside>
-    </div>
+    </>
   );
 }
 

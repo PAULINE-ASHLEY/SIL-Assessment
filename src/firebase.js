@@ -1,6 +1,8 @@
+// Firebase configuration and initialization module
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth';
 
+// Firebase configuration object - contains all necessary settings to connect to Firebase project
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -11,9 +13,14 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
+// Initialize Firebase app with the configuration above
 export const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Authentication service
 export const auth = getAuth(app);
 
-// Providers
+// Enables Google sign-in
 export const googleProvider = new GoogleAuthProvider();
+
+// Enables GitHub sign-in
 export const githubProvider = new GithubAuthProvider();

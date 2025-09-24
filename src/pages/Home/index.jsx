@@ -6,16 +6,13 @@ import Pagination from '../../components/pagination/Pagination';
 import { useAuth } from '../../context/AuthContext';
 
 const Home = () => {
-  // Authentication context to get current user info
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  // Pagination state management
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6); // Fixed number of items per page
-  const [userAlbumsCount, setUserAlbumsCount] = useState({}); // Stores album counts for each user
+  const [itemsPerPage] = useState(6);
+  const [userAlbumsCount, setUserAlbumsCount] = useState({});
 
-  // Fetch all users using custom useFetch hook with memoized callback
+  // Fetching all users using custom useFetch hook with memoized callback
   const fetchFn = useCallback(() => fetchUsers(), []);
   const { data: users, loading, error } = useFetch(fetchFn);
 
@@ -25,7 +22,7 @@ const Home = () => {
       if (!users) return;
 
       const albumCounts = {};
-      // Create promises for all album count requests
+      // Creates promises for all album count requests
       const promises = users.map(async (user) => {
         try {
           const albums = await fetchAlbumsByUser(user.id);
@@ -36,7 +33,7 @@ const Home = () => {
         }
       });
 
-      // Wait for all requests to complete
+      // Waits for all requests to complete
       await Promise.all(promises);
       setUserAlbumsCount(albumCounts);
     };
@@ -44,12 +41,12 @@ const Home = () => {
     fetchAlbumCounts();
   }, [users]);
 
-  // Reset to first page when users data changes
+  // Resets to first page when users data changes
   useEffect(() => {
     setCurrentPage(1);
   }, [users]);
 
-  // Loading state with spinner animation
+  // Shows spinner while data is being fetched
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -60,7 +57,7 @@ const Home = () => {
       </div>
     );
 
-  // Error state with visual error icon and message
+  // Shows error message with warning icon
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -83,7 +80,7 @@ const Home = () => {
       </div>
     );
 
-  // Empty state when no users are found
+  // Shows message when no users are found
   if (!users || users.length === 0)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -106,7 +103,7 @@ const Home = () => {
       </div>
     );
 
-  // Calculate pagination slice for current page
+  // Calculates pagination slice for current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem);
@@ -116,7 +113,7 @@ const Home = () => {
       <div className="max-w-4xl mx-auto">
         {/* Welcome section displaying authenticated user's name */}
         <div className="text-lg font-bold pl-4">
-          <h1>Welcome, {user.displayName}!</h1>
+          <h1>Welcome, {user.displayName || user.email}!</h1>
           <p className="text-gray-600 text-sm">
             Explore the various Users, Albums and Photos.
           </p>
@@ -166,7 +163,7 @@ const Home = () => {
           <h1>All Users</h1>
         </div>
 
-        {/* User Cards Grid with responsive layout */}
+        {/* User Cards*/}
         <div className="grid  xl:grid-cols-3 lg:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 mb-2">
           {currentUsers.map((user) => (
             <div

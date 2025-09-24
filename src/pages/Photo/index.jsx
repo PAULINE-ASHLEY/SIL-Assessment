@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import useFetch from '../../hooks/useFetch';
 import {
   fetchPhotoById,
@@ -8,57 +8,68 @@ import {
   fetchUserById,
 } from '../../utils/api';
 
+// Displays detailed view of a specific photo with editing capabilities
 const Photo = () => {
   const { id } = useParams();
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const [localPhoto, setLocalPhoto] = useState(null);
 
-  // Fetch photo data
+  // Fetch photo data using custom useFetch hook
   const fetchPhotoFn = useCallback(() => fetchPhotoById(id), [id]);
-  const { data: photo, loading, error, refetch } = useFetch(fetchPhotoFn);
+  const { data: photo, loading, error } = useFetch(fetchPhotoFn);
 
-  // Fetch album data for breadcrumb
+  // Fetch album data for breadcrumb navigation
   const fetchAlbumFn = useCallback(() => {
     if (photo?.albumId) {
       return fetchAlbumById(photo.albumId);
     }
-    return Promise.resolve(null);
+    return Promise.resolve(null); // Returns resolved promise if no albumId
   }, [photo?.albumId]);
   const { data: album, loading: albumLoading } = useFetch(fetchAlbumFn);
 
-  // Fetch user data for breadcrumb
+  // Fetch user data for breadcrumb navigation
   const fetchUserFn = useCallback(() => {
     if (album?.userId) {
       return fetchUserById(album.userId);
     }
-    return Promise.resolve(null);
+    return Promise.resolve(null); // Returns resolved promise if no userId
   }, [album?.userId]);
   const { data: user, loading: userLoading } = useFetch(fetchUserFn);
 
-  // Initialize edited title when photo loads
-  useState(() => {
+  // Initializes local photo state when photo data loads
+  useEffect(() => {
     if (photo) {
+      setLocalPhoto(photo);
       setEditedTitle(photo.title);
     }
   }, [photo]);
 
+  // Enters edit mode
   const handleEdit = () => {
     setIsEditing(true);
-    setEditedTitle(photo.title);
+    setEditedTitle(localPhoto.title);
     setSaveError(null);
   };
 
+  // Cancels editing and revert changes
   const handleCancel = () => {
     setIsEditing(false);
-    setEditedTitle(photo.title);
+    setEditedTitle(localPhoto.title);
     setSaveError(null);
   };
 
+  // Saves the edited title
   const handleSave = async () => {
     if (!editedTitle.trim()) {
       setSaveError('Title cannot be empty');
+      return;
+    }
+
+    if (editedTitle.trim() === localPhoto.title) {
+      setIsEditing(false);
       return;
     }
 
@@ -66,11 +77,15 @@ const Photo = () => {
     setSaveError(null);
 
     try {
-      await updatePhotoTitle(id, editedTitle.trim());
+      // Updates the photo title via API
+      const updatedPhoto = await updatePhotoTitle(id, editedTitle.trim());
+
+      // Updates local state immediately for UI feedback
+      setLocalPhoto(updatedPhoto);
+      setEditedTitle(updatedPhoto.title);
       setIsEditing(false);
-      // Refetch to get updated data
-      await refetch();
     } catch (err) {
+      console.error('Save error:', err);
       setSaveError(err.message || 'Failed to update photo title');
     } finally {
       setIsSaving(false);
@@ -85,13 +100,21 @@ const Photo = () => {
     }
   };
 
+  // Uses localPhoto for display
+  const displayPhoto = localPhoto || photo;
+
+  // Shows spinner while data is being fetched
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div
+          role="status"
+          className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"
+        ></div>
       </div>
     );
 
+  // Shows error message if photo fetch fails
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -114,7 +137,8 @@ const Photo = () => {
       </div>
     );
 
-  if (!photo)
+  // Shows message when no photo is found
+  if (!displayPhoto)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -128,7 +152,7 @@ const Photo = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 002 2z"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
           <p className="text-gray-500">No photos found.</p>
@@ -138,7 +162,7 @@ const Photo = () => {
 
   return (
     <div className="p-5 max-w-4xl mx-auto">
-      {/* Breadcrumb */}
+      {/* Breadcrumb Navigation */}
       <nav className="flex mb-6" aria-label="Breadcrumb">
         <ol className="flex items-center space-x-2 text-sm flex-wrap">
           <li>
@@ -164,7 +188,7 @@ const Photo = () => {
           <li className="flex items-center">
             <span className="text-gray-400 mx-2">/</span>
             <Link
-              to={`/album/${photo.albumId}`}
+              to={`/album/${displayPhoto.albumId}`}
               className="text-blue-600 hover:text-blue-800"
             >
               {albumLoading ? 'Loading...' : album?.title || 'Album'}
@@ -172,12 +196,12 @@ const Photo = () => {
           </li>
           <li className="flex items-center">
             <span className="text-gray-400 mx-2">/</span>
-            <span className="text-gray-500">Photo {photo.id}</span>
+            <span className="text-gray-500">Photo {displayPhoto.id}</span>
           </li>
         </ol>
       </nav>
 
-      {/* Photo Display */}
+      {/* Photo Display Section */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div className="flex flex-col items-center">
           {/* Photo Information */}
@@ -186,14 +210,14 @@ const Photo = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Photo ID
               </label>
-              <p className="text-gray-900">{photo.id}</p>
+              <p className="text-gray-900">{displayPhoto.id}</p>
             </div>
 
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Album ID
               </label>
-              <p className="text-gray-900">{photo.albumId}</p>
+              <p className="text-gray-900">{displayPhoto.albumId}</p>
             </div>
 
             <div className="mb-4">
@@ -216,7 +240,9 @@ const Photo = () => {
                   )}
                 </div>
               ) : (
-                <p className="text-gray-900 break-words">{photo.title}</p>
+                <p className="text-gray-900 break-words">
+                  {displayPhoto.title}
+                </p>
               )}
             </div>
           </div>
@@ -252,7 +278,7 @@ const Photo = () => {
         </div>
       </div>
 
-      {/* Photo Details */}
+      {/* Photo Details Section */}
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Photo Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -261,12 +287,12 @@ const Photo = () => {
               Thumbnail URL
             </label>
             <a
-              href={photo.thumbnailUrl}
+              href={displayPhoto.thumbnailUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-500 hover:text-blue-700 text-sm break-all"
             >
-              {photo.thumbnailUrl}
+              {displayPhoto.thumbnailUrl}
             </a>
           </div>
           <div>
@@ -274,12 +300,12 @@ const Photo = () => {
               Full Image URL
             </label>
             <a
-              href={photo.url}
+              href={displayPhoto.url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-500 hover:text-blue-700 text-sm break-all"
             >
-              {photo.url}
+              {displayPhoto.url}
             </a>
           </div>
         </div>

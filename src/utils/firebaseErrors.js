@@ -1,3 +1,4 @@
+// Error messages that appear from the firebase end while trying to signup or signin
 export const getFirebaseErrorMessage = (code) => {
   switch (code) {
     case 'auth/email-already-in-use':
@@ -14,6 +15,8 @@ export const getFirebaseErrorMessage = (code) => {
       return 'Sign-in popup was closed before finishing.';
     case 'auth/cancelled-popup-request':
       return 'Sign-in was interrupted. Try again.';
+    case 'auth/invalid-credential':
+      return 'Your login credentials are invalid. Please check your email and password.';
     default:
       return 'Something went wrong. Please try again.';
   }

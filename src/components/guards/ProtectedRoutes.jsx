@@ -1,11 +1,16 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
+// Acts as a guard for routes that require authentication
 export default function ProtectedRoutes({ redirectPath = '/login' }) {
   const { user, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>; // waiting for Firebase
-  if (!user) return <Navigate to={redirectPath} replace />; // redirect if not logged in
+  // Displays loading state while Firebase auth state is being determined
+  if (loading) return <div>Loading...</div>;
 
-  return <Outlet />; // render protected children
+  // Redirects to login page if user is not authenticated
+  if (!user) return <Navigate to={redirectPath} replace />;
+
+  // Renders child routes if user is authenticated
+  return <Outlet />;
 }

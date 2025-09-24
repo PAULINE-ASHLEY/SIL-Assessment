@@ -10,7 +10,7 @@ const User = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const albumsPerPage = 6;
 
-  // Fetch user data
+  // Fetch user data using custom useFetch hook
   const fetchUserFn = useCallback(() => fetchUserById(id), [id]);
   const {
     data: user,
@@ -18,7 +18,7 @@ const User = () => {
     error: userError,
   } = useFetch(fetchUserFn);
 
-  // Fetch user's albums
+  // Fetch user's albums using custom useFetch hook
   const fetchAlbumsFn = useCallback(() => fetchAlbumsByUser(id), [id]);
   const {
     data: albums,
@@ -26,13 +26,14 @@ const User = () => {
     error: albumsError,
   } = useFetch(fetchAlbumsFn);
 
-  // Calculate pagination for albums
+  // Determines which albums to show on current page
   const indexOfLastAlbum = currentPage * albumsPerPage;
   const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
   const currentAlbums = albums
     ? albums.slice(indexOfFirstAlbum, indexOfLastAlbum)
     : [];
 
+  // Shows spinner while user data is being fetched
   if (userLoading)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -42,6 +43,8 @@ const User = () => {
         ></div>
       </div>
     );
+
+  // Shows error message if user fetch fails
   if (userError)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -63,6 +66,8 @@ const User = () => {
         </div>
       </div>
     );
+
+  // Shows message when no user data is found
   if (!user)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -87,7 +92,7 @@ const User = () => {
 
   return (
     <div>
-      {/* Breadcrumb */}
+      {/* Breadcrumb Navigation */}
       <nav className="flex mb-6" aria-label="Breadcrumb">
         <ol className="flex items-center space-x-2 text-sm">
           <li>
@@ -107,18 +112,24 @@ const User = () => {
           </li>
         </ol>
       </nav>
+
       {/* User Profile Header */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div className="flex items-center">
+          {/* User Avatar */}
           <div className="w-24 h-24 rounded-full bg-black flex items-center justify-center text-white text-4xl font-bold mr-6">
             {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>
           <div className="flex-1">
+            {/* User Name */}
             <h1 className="text-lg font-bold text-gray-900">{user.name}</h1>
+            {/* User Email */}
             <p className="text-gray-600 mt-1">{user.email}</p>
+            {/* Company Name if available */}
             {user.company && (
               <p className="text-gray-500 mt-1">{user.company.name}</p>
             )}
+            {/* Website Link if available */}
             {user.website && (
               <p className="text-blue-500 mt-1">
                 <a
@@ -133,14 +144,16 @@ const User = () => {
           </div>
         </div>
 
-        {/* Contact Information */}
+        {/* Contact Information Grid */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Phone Number if available */}
           {user.phone && (
             <div>
               <h3 className="text-sm font-medium text-gray-500">Phone</h3>
               <p className="text-gray-900">{user.phone}</p>
             </div>
           )}
+          {/* Address if available */}
           {user.address && (
             <div>
               <h3 className="text-sm font-medium text-gray-500">Address</h3>
@@ -154,10 +167,12 @@ const User = () => {
 
       {/* User's Albums Section */}
       <div>
+        {/* Section Header with Title and Album Count */}
         <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between items-center mb-6 gap-y-2">
           <h2 className="text-lg font-bold text-gray-900">
             {user.name} albums
           </h2>
+          {/* Album Count Badge */}
           {albums && (
             <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
               {albums.length} album{albums.length !== 1 ? 's' : ''}
@@ -165,13 +180,17 @@ const User = () => {
           )}
         </div>
 
+        {/* Albums Loading State */}
         {albumsLoading && <div>Loading albums...</div>}
+
+        {/* Albums Error State */}
         {albumsError && (
           <div className="text-red-500">
             Error loading albums: {albumsError}
           </div>
         )}
 
+        {/* Albums Grid */}
         {albums && albums.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 xl:grid-cols-3 gap-4 mb-6">
@@ -180,10 +199,13 @@ const User = () => {
                   key={album.id}
                   className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6"
                 >
+                  {/* Album Title */}
                   <h4 className="font-normal text-md mb-2">{album.title}</h4>
+                  {/* Album ID */}
                   <p className="text-gray-600 text-sm mb-3">
                     Album ID: {album.id}
                   </p>
+                  {/* View Photos Link */}
                   <Link
                     to={`/album/${album.id}`}
                     className="bg-black text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"
@@ -194,6 +216,7 @@ const User = () => {
               ))}
             </div>
 
+            {/* Pagination Only show if there are more albums than per page */}
             {albums.length > albumsPerPage && (
               <Pagination
                 currentPage={currentPage}
@@ -204,6 +227,7 @@ const User = () => {
             )}
           </>
         ) : (
+          /* Shows when no albums found */
           !albumsLoading && (
             <div className="text-gray-500">No albums found for this user.</div>
           )
