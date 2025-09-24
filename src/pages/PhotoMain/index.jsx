@@ -7,48 +7,59 @@ import { Link } from 'react-router-dom';
 
 const PhotoMain = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(12);
-  const [photoAlbums, setPhotoAlbums] = useState({});
 
-  // Fetch all photos
-  const fetchFn = useCallback(() => fetchPhotos(), []);
+  // State for pagination management
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(12); // Fixed number of items per page (12 photos per page)
+  const [photoAlbums, setPhotoAlbums] = useState({}); // Stores album data keyed by photo ID
+
+  // Fetch all photos using custom useFetch hook
+  const fetchFn = useCallback(() => fetchPhotos(), []); // Memoized fetch function
   const { data: photos, loading, error } = useFetch(fetchFn);
 
-  // Fetch album data for each photo
+  // Effect to fetch album data for each photo when photos data changes
   useEffect(() => {
     const fetchAlbumData = async () => {
-      if (!photos) return;
+      if (!photos) return; // Exit if no photos data
 
       const albumData = {};
+      // Create promises for all photos to fetch their album data concurrently
       const promises = photos.map(async (photo) => {
         try {
           const album = await fetchAlbumById(photo.albumId);
-          albumData[photo.id] = album;
+          albumData[photo.id] = album; // Store album data by photo ID
         } catch (err) {
+          // Handle errors gracefully for individual album fetches
           console.error(`Failed to fetch album for photo ${photo.id}:`, err);
-          albumData[photo.id] = null;
+          albumData[photo.id] = null; // Set to null on error
         }
       });
 
+      // Wait for all album fetches to complete
       await Promise.all(promises);
-      setPhotoAlbums(albumData);
+      setPhotoAlbums(albumData); // Update state with all album data
     };
 
     fetchAlbumData();
-  }, [photos]);
+  }, [photos]); // Dependency: runs when photos data changes
 
+  // Effect to reset to first page when photos data changes
   useEffect(() => {
     setCurrentPage(1);
   }, [photos]);
 
+  // Shows spinner while data is being fetched
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div
+          role="status"
+          className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"
+        ></div>
       </div>
     );
 
+  // Shows error message with warning icon
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -71,6 +82,7 @@ const PhotoMain = () => {
       </div>
     );
 
+  //Shows message when no photos are found
   if (!photos || photos.length === 0)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -93,37 +105,45 @@ const PhotoMain = () => {
       </div>
     );
 
+  // Pagination calculations - determine which photos to show on current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentPhotos = photos.slice(indexOfFirstItem, indexOfLastItem);
 
+  // Main component render - photos grid with pagination
   return (
     <div className="min-h-screen bg-[#f5f6fb] py-2 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="p-4 text-xl font-bold">
+        {/* Page title */}
+        <div className="p-4 text-lg font-bold">
           <h1>All Photos</h1>
         </div>
 
-        {/* Photo Cards Grid */}
+        {/* Photo Cards Grid - Responsive layout with different column counts */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {currentPhotos.map((photo) => (
             <div
               key={photo.id}
-              onClick={() => navigate(`/album/${photo.id}/photos`)}
+              onClick={() => navigate(`/album/${photo.id}/photos`)} // Navigate to photo detail page
               className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100"
             >
-              <div className="p-4">
-                {/* Photo Info */}
+              <div className="p-6">
+                {/* Photo Information Section */}
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-800 mb-1 line-clamp-2">
-                    {photo.title}
-                  </h3>
-                  <p className="text-xs text-gray-600 mb-2">
+                  {/* Photo title */}
+                  <h3 className="font-normal text-md mb-2">{photo.title}</h3>
+
+                  {/* Photo ID display */}
+                  <p className="text-gray-600 text-sm mb-3">
                     Photo ID: {photo.id}
                   </p>
-                  <p className="text-xs text-gray-500">
+
+                  {/* Album title - dynamically loaded */}
+                  <p className="text-gray-600 text-sm mb-3">
                     Album: {photoAlbums[photo.id]?.title || 'Loading...'}
                   </p>
+
+                  {/* View Photos button/link */}
                   <Link
                     to="#"
                     className="bg-black text-white mt-4 px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"
@@ -136,7 +156,7 @@ const PhotoMain = () => {
           ))}
         </div>
 
-        {/* Pagination */}
+        {/* Pagination Component */}
         <div className="rounded-lg p-2">
           <Pagination
             currentPage={currentPage}

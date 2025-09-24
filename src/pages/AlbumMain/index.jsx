@@ -7,24 +7,32 @@ import { Link } from 'react-router-dom';
 
 const AlbumMain = () => {
   const navigate = useNavigate();
+
+  // State for pagination management
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
 
-  // Fetch all albums
+  // Fetch all albums using custom useFetch hook
   const fetchFn = useCallback(() => fetchAlbums(), []);
   const { data: albums, loading, error } = useFetch(fetchFn);
 
+  // Effect to reset to first page when albums data changes
   useEffect(() => {
     setCurrentPage(1);
   }, [albums]);
 
+  // Shows spinner while data is being fetched
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div
+          role="status"
+          className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"
+        ></div>
       </div>
     );
 
+  // Shows error message with warning icon
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -47,6 +55,7 @@ const AlbumMain = () => {
       </div>
     );
 
+  // Shows message when no albums are found
   if (!albums || albums.length === 0)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -69,6 +78,7 @@ const AlbumMain = () => {
       </div>
     );
 
+  // Pagination calculations - determine which albums to show on current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentAlbums = albums.slice(indexOfFirstItem, indexOfLastItem);
@@ -76,30 +86,32 @@ const AlbumMain = () => {
   return (
     <div className="min-h-screen bg-[#f5f6fb] py-2 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="p-4 text-xl font-bold">
+        {/* Page title */}
+        <div className="p-4 text-lg font-bold">
           <h1>All Albums</h1>
         </div>
 
-        {/* Album Cards Grid */}
+        {/* Album Cards Grid - Responsive layout with different column counts */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {currentAlbums.map((album) => (
             <div
               key={album.id}
-              onClick={() => navigate(`/album/${album.id}`)}
+              onClick={() => navigate(`/album/${album.id}`)} // Navigate to album detail page
               className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100"
             >
               <div className="p-6">
                 <div className="flex flex-col">
-                  {/* Album Info */}
+                  {/* Album Information Section */}
                   <div className="flex-1">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
-                      {album.title}
-                    </h2>
-                    <div>
-                      <p className="text-gray-600 text-sm mb-3">
-                        Album ID: {album.id}
-                      </p>
-                    </div>
+                    {/* Album title */}
+                    <h3 className="font-normal text-md mb-2">{album.title}</h3>
+
+                    {/* Album ID display */}
+                    <p className="text-gray-600 text-sm mb-3">
+                      Album ID: {album.id}
+                    </p>
+
+                    {/* View Photos button/link */}
                     <Link
                       to="#"
                       className="bg-black text-white mt-4 px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"
@@ -113,7 +125,7 @@ const AlbumMain = () => {
           ))}
         </div>
 
-        {/* Pagination */}
+        {/* Pagination Component */}
         <div className="rounded-lg p-2">
           <Pagination
             currentPage={currentPage}

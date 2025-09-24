@@ -36,7 +36,10 @@ const User = () => {
   if (userLoading)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div
+          role="status"
+          className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"
+        ></div>
       </div>
     );
   if (userError)
@@ -111,7 +114,7 @@ const User = () => {
             {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
           </div>
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
+            <h1 className="text-lg font-bold text-gray-900">{user.name}</h1>
             <p className="text-gray-600 mt-1">{user.email}</p>
             {user.company && (
               <p className="text-gray-500 mt-1">{user.company.name}</p>
@@ -152,7 +155,7 @@ const User = () => {
       {/* User's Albums Section */}
       <div>
         <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between items-center mb-6 gap-y-2">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-lg font-bold text-gray-900">
             {user.name} albums
           </h2>
           {albums && (
@@ -177,9 +180,7 @@ const User = () => {
                   key={album.id}
                   className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100 p-6"
                 >
-                  <h3 className="font-normal text-md mb-2">
-                    <b>Album Title:</b> {album.title}
-                  </h3>
+                  <h4 className="font-normal text-md mb-2">{album.title}</h4>
                   <p className="text-gray-600 text-sm mb-3">
                     Album ID: {album.id}
                   </p>
