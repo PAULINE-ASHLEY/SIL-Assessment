@@ -11,7 +11,6 @@ export { default as ProtectedRoutes } from './guards/ProtectedRoutes';
 export { default as SocialLoginButton } from './buttons/SocialLoginButton';
 
 //forms
-export { default as EmailForm } from './forms/EmailForm';
 export { default as AuthForm } from './forms/AuthForm';
 
 //pagination
