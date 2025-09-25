@@ -7,41 +7,38 @@ import { Link } from 'react-router-dom';
 
 const PhotoMain = () => {
   const navigate = useNavigate();
-
-  // State for pagination management
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(12); // Fixed number of items per page (12 photos per page)
-  const [photoAlbums, setPhotoAlbums] = useState({}); // Stores album data keyed by photo ID
+  const [itemsPerPage] = useState(12);
+  const [photoAlbums, setPhotoAlbums] = useState({});
 
-  // Fetch all photos using custom useFetch hook
-  const fetchFn = useCallback(() => fetchPhotos(), []); // Memoized fetch function
+  // Fetching all photos using custom useFetch hook
+  const fetchFn = useCallback(() => fetchPhotos(), []);
   const { data: photos, loading, error } = useFetch(fetchFn);
 
   // Effect to fetch album data for each photo when photos data changes
   useEffect(() => {
     const fetchAlbumData = async () => {
-      if (!photos) return; // Exit if no photos data
+      if (!photos) return;
 
       const albumData = {};
-      // Create promises for all photos to fetch their album data concurrently
+      // Creates promises for all photos to fetch their album data concurrently
       const promises = photos.map(async (photo) => {
         try {
           const album = await fetchAlbumById(photo.albumId);
-          albumData[photo.id] = album; // Store album data by photo ID
+          albumData[photo.id] = album;
         } catch (err) {
-          // Handle errors gracefully for individual album fetches
           console.error(`Failed to fetch album for photo ${photo.id}:`, err);
-          albumData[photo.id] = null; // Set to null on error
+          albumData[photo.id] = null;
         }
       });
 
-      // Wait for all album fetches to complete
+      // Waiting for all album fetches to complete
       await Promise.all(promises);
-      setPhotoAlbums(albumData); // Update state with all album data
+      setPhotoAlbums(albumData);
     };
 
     fetchAlbumData();
-  }, [photos]); // Dependency: runs when photos data changes
+  }, [photos]);
 
   // Effect to reset to first page when photos data changes
   useEffect(() => {
@@ -105,12 +102,11 @@ const PhotoMain = () => {
       </div>
     );
 
-  // Pagination calculations - determine which photos to show on current page
+  // Determine which photos to show on current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentPhotos = photos.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Main component render - photos grid with pagination
   return (
     <div className="min-h-screen bg-[#f5f6fb] py-2 px-4">
       <div className="max-w-7xl mx-auto">
@@ -119,12 +115,12 @@ const PhotoMain = () => {
           <h1>All Photos</h1>
         </div>
 
-        {/* Photo Cards Grid - Responsive layout with different column counts */}
+        {/* Photo Cards Grid*/}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {currentPhotos.map((photo) => (
             <div
               key={photo.id}
-              onClick={() => navigate(`/album/${photo.id}/photos`)} // Navigate to photo detail page
+              onClick={() => navigate(`/album/${photo.id}/photos`)}
               className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100"
             >
               <div className="p-6">
@@ -138,12 +134,12 @@ const PhotoMain = () => {
                     Photo ID: {photo.id}
                   </p>
 
-                  {/* Album title - dynamically loaded */}
+                  {/* Album title */}
                   <p className="text-gray-600 text-sm mb-3">
                     Album: {photoAlbums[photo.id]?.title || 'Loading...'}
                   </p>
 
-                  {/* View Photos button/link */}
+                  {/* View Photos link */}
                   <Link
                     to="#"
                     className="bg-black text-white mt-4 px-4 py-2 rounded-md hover:bg-blue-600 transition-colors text-sm inline-block"

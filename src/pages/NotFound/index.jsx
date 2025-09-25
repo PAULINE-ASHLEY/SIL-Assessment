@@ -2,10 +2,9 @@ import { Link } from 'react-router-dom';
 
 const NotFound = () => {
   return (
-    // Main container - full viewport height with centered content
     <div className="min-h-screen bg-white flex items-center justify-center px-4">
       <div className="text-center">
-        {/* 404 Error Code - large, prominent display */}
+        {/* 404 Error Code*/}
         <h1 className="text-6xl font-bold text-gray-400 mb-4">404</h1>
 
         {/* Main error message */}

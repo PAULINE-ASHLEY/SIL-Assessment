@@ -2,11 +2,10 @@ import { Link } from 'react-router-dom';
 
 export default function Landing() {
   return (
-    // Main container - full viewport height with centered content and hidden overflow
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Background container with decorative elements */}
       <div className="absolute inset-0 -z-10">
-        {/* Main gradient background - soft blue to purple gradient */}
+        {/* Main gradient background*/}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"></div>
 
         {/* Decorative geometric shapes with blur effects */}
@@ -24,7 +23,7 @@ export default function Landing() {
 
       {/* Main content container with responsive layout */}
       <div className="container mx-auto px-4 py-12 flex flex-col md:flex-row items-center justify-between">
-        {/* Text Content Section - Left side on desktop, top on mobile */}
+        {/* Text Content Section */}
         <div className="md:w-1/2 mb-12 md:mb-0 px-14">
           <div>
             {/* Main headline with emphasis on key phrase */}
@@ -61,7 +60,7 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* Illustration Section - Right side on desktop, bottom on mobile */}
+        {/* Illustration Section*/}
         <div className="md:w-1/2 flex justify-center">
           {/* Main landing page illustration */}
           <img

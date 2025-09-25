@@ -4,12 +4,8 @@ import useFetch from '../../hooks/useFetch';
 import { fetchUsers, fetchAlbumsByUser } from '../../utils/api';
 import Pagination from '../../components/pagination/Pagination';
 
-// Main component for displaying users with pagination and album counts
 const UserMain = () => {
-  // Hook for programmatic navigation to user details
   const navigate = useNavigate();
-
-  // State for pagination management
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
   const [userAlbumsCount, setUserAlbumsCount] = useState({});
@@ -21,18 +17,17 @@ const UserMain = () => {
   // Effect to fetch album counts for each user when users data changes
   useEffect(() => {
     const fetchAlbumCounts = async () => {
-      if (!users) return; // Exit if no users data
+      if (!users) return;
 
       const albumCounts = {};
       // Create promises for all users to fetch their albums concurrently
       const promises = users.map(async (user) => {
         try {
           const albums = await fetchAlbumsByUser(user.id);
-          albumCounts[user.id] = albums.length; // Store album count by user ID
+          albumCounts[user.id] = albums.length;
         } catch (err) {
-          // Handle errors gracefully for individual user album fetches
           console.error(`Failed to fetch albums for user ${user.id}:`, err);
-          albumCounts[user.id] = 0; // Set count to 0 on error
+          albumCounts[user.id] = 0;
         }
       });
 
@@ -42,7 +37,7 @@ const UserMain = () => {
     };
 
     fetchAlbumCounts();
-  }, [users]); // Dependency: runs when users data changes
+  }, [users]);
 
   // Effect to reset to first page when users data changes
   useEffect(() => {
@@ -106,12 +101,11 @@ const UserMain = () => {
       </div>
     );
 
-  // Pagination calculations - determine which users to show on current page
+  // Determines which users to show on current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Main component render - users grid with pagination
   return (
     <div className="min-h-screen">
       <div className="max-w-4xl mx-auto">
@@ -120,12 +114,12 @@ const UserMain = () => {
           <h1>All Users</h1>
         </div>
 
-        {/* User Cards Grid - Responsive layout with different column counts per breakpoint */}
+        {/* User Cards Grid */}
         <div className="grid  xl:grid-cols-3 lg:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-6 mb-2">
           {currentUsers.map((user) => (
             <div
               key={user.id}
-              onClick={() => navigate(`/user/${user.id}`)} // Navigate to user detail page
+              onClick={() => navigate(`/user/${user.id}`)}
               className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-100"
             >
               <div className="p-6">

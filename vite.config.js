@@ -11,7 +11,7 @@ export default defineConfig({
     environment: 'jsdom', // needed for React components
     setupFiles: './src/setupTests.js', // setup for matchers / mocks
     include: ['src/__tests__/**/*.test.{js,jsx}'], // central test folder
-    css: true, // optional: allows CSS imports inside components
+    css: true, // allows CSS imports inside components
   },
   resolve: {
     alias: {

@@ -27,16 +27,18 @@ import {
   PHOTOMAIN,
 } from './constants';
 
+// Defines all application routes
 export default function RouterConfig() {
   return (
     <Routes>
-      {/* Public */}
+      {/* Public Routes */}
       <Route path={LANDING} element={<Landing />} />
       <Route path={LOGIN} element={<Login />} />
       <Route path={SIGNUP} element={<Signup />} />
 
-      {/* Protected */}
+      {/* Protected Routes */}
       <Route element={<ProtectedRoutes />}>
+        {/* Layout wrapper for all protected routes */}
         <Route
           element={
             <PageWrapper>
@@ -54,7 +56,7 @@ export default function RouterConfig() {
         </Route>
       </Route>
 
-      {/* 404 */}
+      {/* 404 route */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

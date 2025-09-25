@@ -1,20 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AuthForm from '../../components/forms/AuthForm';
 import SocialLoginButton from '../../components/buttons/SocialLoginButton';
+import { getFirebaseErrorMessage } from '../../utils/firebaseErrors';
 
 const Signup = () => {
-  // Destructure authentication-related values and functions from the auth context
   const { user, loading, signupWithEmail, loginWithGoogle, loginWithGithub } =
     useAuth();
-
-  // Hook for programmatic navigation
   const navigate = useNavigate();
+  const [authError, setAuthError] = useState('');
 
   // Effect hook to redirect authenticated users away from signup page
   useEffect(() => {
-    // If not loading and user is authenticated, redirect to home page
     if (!loading && user) {
       navigate('/home');
     }
@@ -23,17 +21,17 @@ const Signup = () => {
   // Handler function for email/password signup
   const handleSignup = async (email, password) => {
     try {
-      // Attempt to create a new user account
+      setAuthError(''); // Clears any previous errors
       await signupWithEmail(email, password);
-      // On success, redirect to home page
       navigate('/home');
     } catch (err) {
-      // Log any errors that occur during signup process
       console.error('Signup error:', err);
+      // Use your utility function to get user-friendly error messages
+      setAuthError(getFirebaseErrorMessage(err.code));
     }
   };
 
-  // Loading state UI - shows a spinner while authentication state is being determined
+  // Shows spinner while data is being fetched
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -44,10 +42,9 @@ const Signup = () => {
       </div>
     );
 
-  // Main component render - split layout with left panel and right form panel
   return (
     <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row min-h-screen">
-      {/* Left panel - decorative section with branding */}
+      {/* Left panel */}
       <div className="md:w-[40%] lg:w-[40%] xl:w-[40%] 2xl:w-[40%] bg-black py-10 lg:py-0 xl:py-0 2xl:py-0 rounded-r-xl">
         {/* Back arrow navigation to home */}
         <div className="text-white m-6">
@@ -61,13 +58,17 @@ const Signup = () => {
         </div>
       </div>
 
-      {/* Right panel - signup form section */}
+      {/* Right panel*/}
       <div className="md:w-[60%] lg:w-[60%] xl:w-[60%] 2xl:w-[60%] p-10 lg:p-0 xl:p-0 2xl:p-0 flex flex-col items-center mt-14">
         {/* Page title */}
         <h1 className="text-2xl font-bold">Create new account</h1>
 
         {/* Email/Password Signup Form Component */}
-        <AuthForm onSubmit={handleSignup} buttonLabel="Continue with Email" />
+        <AuthForm
+          onSubmit={handleSignup}
+          buttonLabel="Continue with Email"
+          error={authError}
+        />
 
         {/* Social Login Buttons Component */}
         <SocialLoginButton

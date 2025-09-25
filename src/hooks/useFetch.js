@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 
+// Custom hook for handling data fetching with loading and error states
 export default function useFetch(fetchFunction) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [data, setData] = useState(null); // Stores the fetched data
+  const [loading, setLoading] = useState(true); // Tracks loading state
+  const [error, setError] = useState(null); // Stores any error messages
 
+  // useEffect hook to handle the data fetching lifecycle
   useEffect(() => {
     let isMounted = true;
 
+    // Async function to perform the data fetch
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -17,6 +20,7 @@ export default function useFetch(fetchFunction) {
         setData(result);
       } catch (err) {
         if (!isMounted) return;
+
         setError(err.message || 'Error fetching data');
       } finally {
         if (isMounted) {
