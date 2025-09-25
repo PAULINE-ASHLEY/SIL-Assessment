@@ -1,8 +1,21 @@
 # SIL Assessment
 
-This project has been developed as part of SIL frontend engineering assessment. The goal of the test is to build a React application that consumes a backend service (the provided `jsonplaceholder` API) and demonstrate frontend engineering skills including authentication, data fetching, UI presentation, state management, testing, and CI/CD integration.
+This project has been developed as part of the SIL Frontend Engineering Assessment.
+The goal was to build a React application that consumes the jsonplaceholder API while demonstrating frontend engineering skills, including:
 
-The project also showcases a complete developer workflow by integrating code quality checks, automated testing, and deployment pipelines. Every change pushed goes through linting, testing, and is automatically deployed to Vercel when merged into the `main` branch.
+Authentication (Firebase + Google Sign-In, GitHub Sign-In & Email/Password).
+
+Data fetching and state management.
+
+UI/UX presentation with responsive design.
+
+Error handling and persistence across reloads.
+
+Unit testing with Vitest + React Testing Library.
+
+Code quality checks with ESLint.
+
+CI/CD setup with GitHub Actions and Vercel deployment.
 
 ---
 
@@ -10,29 +23,47 @@ The project also showcases a complete developer workflow by integrating code qua
 
 The application includes the following features:
 
-- **Landing Page**: Publicly accessible with a short explanation of what the application does.
-- **Authentication**: Users can log in using Google authentication via Firebase.
-- **Home Page (Authenticated)**: Lists all users, including how many albums each user has.
-- **User Page**: Shows user information and their albums.
+- **Landing Page**: A publicly accessible introduction to the application.
+- **Authentication**:
+
+  - Google and GitHub Authentication (Firebase).
+  - Email/Password authentication (Firebase).
+  - Error handling for invalid credentials.
+  - Reusable AuthForm component for login/signup.
+
+- **Home Page (Authenticated)**: Lists all users, showing how many albums each user owns.
+- **User Page**: Displays user information and their albums.
 - **Album Page**: Displays album details and its photos.
 - **Photo Page**: Displays a single photo with the option to edit its title, which triggers a PATCH/PUT request.
 
 Additional requirements achieved:
 
-- Responsive design (works on mobile, tablet, and desktop).
-- Data persistence across page reloads.
+- Fully responsive design (mobile, tablet, desktop).
 - Loading states and error handling for API requests.
+- Data persistence so session/authentication persists across reloads.
+- Reusable components for forms, navigation, and layout.
+- Test coverage with Vitest and React Testing Library.
+- Branching workflow with CI/CD integration.
 
 ---
 
 ## What Has Been Achieved
 
-- Configured ESLint with React, Hooks, and JSX accessibility rules.
-- Added Vitest testing setup with global configuration (`test`, `expect`, etc.).
-- Created a GitHub Actions workflow that runs linting and tests on every push/PR.
-- Integrated Vercel deployment so that merges to `main` are deployed automatically.
-- Established a branching workflow (`development` for coding, `main` for production).
-- Successfully deployed the application to Vercel.
+- **Coding Quality and Tooling**
+  - Configured ESLint (React, Hooks, JSX rules).
+  - Pre-configured linting commands for fixes.
+- **Testing**
+  - Added Vitest + React Testing Library.
+  - Wrote tests for reusable components (AuthForm, etc.).
+  - Handled common test cases: multiple matches, missing roles, async API data.
+- **Authentication**
+  - Integrated Firebase Authentication.
+  - Added error handling for auth/invalid-credential.
+  - Abstracted Firebase error messages for better UX.
+- **CI/CD Deployment**
+  - GitHub Actions workflow: runs linting and tests on every push/PR.
+  - Vercel deployment: automatically deploys merges to main.
+  - Branching: development for coding, main for production.
 
 ---
 
@@ -51,7 +82,22 @@ cd SIL-Assessment
 npm install
 ```
 
-### 3. Run locally
+### 3. Setup Firebase
+
+- Create a Firebase project.
+- Enable Google authentication and Email/Password authentication.
+- Copy your Firebase config into .env file:
+
+```bash
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+### 4. Run locally
 
 ```bash
 npm run dev
